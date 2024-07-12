@@ -1,0 +1,128 @@
+{
+  "Actor": {
+    "types": ["character", "npc"],
+    "templates": {
+      "base": {
+        "health": {
+          "value": 10,
+          "min": 0,
+          "max": 10
+        },
+        "power": {
+          "value": 5,
+          "min": 0,
+          "max": 5
+        },
+        "biography": ""
+      }
+    },
+    "character": {
+      "templates": ["base"],
+      "attributes": {},
+      "yesterday": "",
+      "atw": "",
+      "ready": {
+          "value": 0,
+	  "min": 0,
+	  "max": 4
+      },
+      "advanced": {
+          "value": 0,
+	  "min": 0,
+	  "max": 6
+      },
+      "apocalyptic": {
+          "value": 0,
+	  "min": 0,
+	  "max": 8
+      },
+      "da_attributes": {
+        "body": {
+          "value": 1,
+	  "min": 0,
+	  "max": 6,
+	  "label": "Body",
+          "llabel": "body"
+        },
+        "reaction": {
+          "value": 1,
+	  "min": 0,
+	  "max": 6,
+	  "label": "Reaction",
+          "llabel": "reaction"
+        },        
+        "mind": {
+          "value": 1,
+	  "min": 0,
+	  "max": 6,
+	  "label": "Mind",
+          "llabel": "mind"
+        },
+        "presence": {
+          "value": 1,
+	  "min": 0,
+	  "max": 6,
+	  "label": "Presence",
+          "llabel": "presence"
+        },
+        "determination": {
+          "value": 1,
+	  "min": 0,
+	  "max": 6,
+	  "label": "Determination",
+          "llabel": "determination"
+        }
+      },
+      "abilities": {
+        "str": {
+          "value": 10
+        },
+        "dex": {
+          "value": 10
+        },
+        "con": {
+          "value": 10
+        },
+        "int": {
+          "value": 10
+        },
+        "wis": {
+          "value": 10
+        },
+        "cha": {
+          "value": 10
+        }
+      }
+    },
+    "npc": {
+      "templates": ["base"],
+      "cr": 0
+    }
+  },
+  "Item": {
+    "types": ["item", "feature", "spell", "scar"],
+    "templates": {
+      "base": {
+        "description": ""
+      }
+    },
+    "item": {
+      "templates": ["base"],
+      "quantity": 1,
+      "weight": 0,
+      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
+    },
+    "feature": {
+      "templates": ["base"]
+    },
+    "scar": {
+      "templates": [],
+      "description": "",
+      "effect": ""
+    },
+    "spell": {
+      "templates": ["base"],
+      "spellLevel": 1
+    }
+  }
+}
