@@ -282,8 +282,9 @@ export class DeadAirActorSheet extends ActorSheet {
         let index = dataset.index;
 
      // Update the attribute
-        let doeval = eval(`this.actor.system.da_attributes.${attribute}.value = ${index};`);
-        eval(doeval);
+        let actor = this.actor;
+
+        actor.update({ [`system.da_attributes.${attribute}.value`]: `${index}` });
 
     // Get all the attribute values
         let attributereference = `this.actor.system.da_attributes`;
@@ -368,16 +369,16 @@ export class DeadAirActorSheet extends ActorSheet {
                       let rolltt2 = await advroll.getTooltip();
                       let rolltt3 = await disroll.getTooltip();
 
-                      const template_file = "systems/dead-air/templates/dialogue/diceroll.html";
+                      const template_file = "systems/dead-air/templates/dialogue/roll_output.html";
                       const rendered_html = await renderTemplate(template_file, {});
 
-//                      if (success === "yes") {
-//                          content = html;
-//	                  content = `<input class="bigcirclegreen" type="text" value="${OL}" data-dtype="Number">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
-//                                             } else {
-//                          content = html;
-//	                  content = `<input class="bigcirclered">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
-//	                                     }
+                      if (success === "yes") {
+                          content = html;
+	                  content = `<input class="bigcirclegreen" type="text" value="${OL}" data-dtype="Number">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
+                                             } else {
+                          content = html;
+	                  content = `<input class="bigcirclered">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
+	                                     }
 
                       ChatMessage.create({content: `${rendered_html}`});
               }

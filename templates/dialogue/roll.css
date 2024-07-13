@@ -1,0 +1,12 @@
+.dead-air .sheet-body {
+  background-color: white;
+}
+
+.dead-air .bigcirclegreen {
+  background-color: white;
+  border: 2px solid teal;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 50px;
+  width: 50px;
+}
