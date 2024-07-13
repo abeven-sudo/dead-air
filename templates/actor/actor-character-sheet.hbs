@@ -1,63 +1,65 @@
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
 
-  {{!-- Sheet Header --}}
-  <header class="sheet-header">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
-    <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
-      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
-      use both the "grid" and "grid-Ncol" class where "N" can be any number
-      from 1 to 12 and will create that number of columns.  --}}
-      <div class="resources grid grid-3col">
-
-        {{!-- "flex-group-center" is also defined in the _grid.scss file
-        and it will add a small amount of padding, a border, and will
-        center all of its child elements content and text. --}}
-        <div class="resource flex-group-center">
-          <label for="system.soma.value" class="resource-label">Soma</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.soma.value" value="{{system.soma.value}}" data-dtype="Number"/>
-          <span> / </span>
-          <input type="text" name="system.soma.max" value="{{system.soma.max}}" data-dtype="Number"/>
-          </div>
-        </div>
-
-        <div class="resource flex-group-center">
-          <label for="system.PNR.value" class="resource-label">PNR</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.PNR.value" value="{{system.PNR.value}}" data-dtype="Number"/>
-          <span> / </span>
-          <input type="text" name="system.PNR.max" value="{{system.PNR.max}}" data-dtype="Number"/>
-          </div>
-        </div>
-
-        <div class="resource flex-group-center">
-          <label for="system.attributes.experience.value" class="resource-label">Experience</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.attributes.experience.value" value="{{system.attributes.experience.value}}" data-dtype="Number"/>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </header>
-
-  {{!-- Sheet Tab Navigation --}}
-  <nav class="sheet-tabs tabs" data-group="primary">
-    {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="features">Attributes</a>
-    <a class="item" data-tab="description">Descriptors</a>
-    <a class="item" data-tab="items">Iconic Items</a>
-  </nav>
-
   {{!-- Sheet Body --}}
-  <section class="sheet-body">
+  <section class="sheet-body grid grid-3col">
 
-    {{!-- Owned Features Tab --}}
-    <div class="tab features" data-group="primary" data-tab="features">
-      <section class="abilities">
-	<h3 align="center">Attributes</h3>
-         <div class="abilities grid grid-5col flex-group-center">
+  {{!-- Name, Descriptions and Image Header --}}
+
+    <div class="grid-start-span2">
+      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+      <label class="charname"><a class="item-control data-chat" title="Chat" data-type="yesterday"></a></label>
+      <textarea class="description-label" type="text" name="system.description" rows="8" placeholder="Description here">{{system.description}}</textarea>
+    </div>
+
+    <div class="flex-group-center">
+      <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="200" width="180"/>
+    </div>
+
+  {{!-- Descriptors and Gifts, Bonds, Survival Instinct span the 2 columns --}}
+
+    <div class="grid-start-span2">
+	<h3>Descriptors and Gifts</h3>
+
+	<label class="description-label">Yesterday's World </label>
+	<textarea class="description-label" type="text" name="system.yesterday" rows="4" placeholder="Description here">{{system.yesterday}}</textarea>
+	<label class="description-label">Along The Way </label>
+	<textarea class="description-label" type="text" name="system.atw" rows="4" placeholder="Description here">{{system.atw}}</textarea>
+	<label class="description-label">Today's World </label>
+	<textarea class="description-label" type="text" name="system.today" rows="4" placeholder="Description here">{{system.today}}</textarea>
+	<label class="description-label">Tomorrow's World </label>
+	<textarea class="description-label" type="text" name="system.tomorrow" rows="4" placeholder="Description here">{{system.tomorrow}}</textarea>
+	<h3>Bonds</h3>
+	<label class="description-label"></label>
+	<textarea class="description-label" type="text" name="system.bonds" rows="4" placeholder="Description here">{{system.bonds}}</textarea>
+	<h3>Survival Instinct</h3>
+	<label class="description-label"></label>
+	<textarea class="description-label" type="text" name="system.instinct" rows="4" placeholder="Description here">{{system.instinct}}</textarea>
+    </div>
+
+  {{!-- Soma, PNR, Exp, Attributes, Bonds, Survival Instinct last columns --}}
+
+    <div>
+        <div class="grid grid-3col flex-group-center">
+          <div>
+	  <label for="system.soma.value" class="resource-label">Soma</label><br>
+          <input class="circleinput" type="text" name="system.soma.value" value="{{system.soma.value}}" data-dtype="Number"/><br>
+          <span> | </span><br>
+          <input class="circleinputdotted" type="text" name="system.soma.max" value="{{system.soma.max}}" data-dtype="Number"/>
+ 	  </div>
+	  <div>
+          <label for="system.PNR.value" class="resource-label">PNR</label><br>
+          <input class="circleinput" type="text" name="system.PNR.value" value="{{system.PNR.value}}" data-dtype="Number"/><br>
+          <span> | </span><br>
+          <input class="circleinputdotted" type="text" name="system.PNR.max" value="{{system.PNR.max}}" data-dtype="Number"/>
+	  </div>
+	  <div>
+          <label for="system.attributes.experience.value" class="resource-label">XP</label><br>
+          <input class="circleinput" type="text" name="system.attributes.experience.value" value="{{system.attributes.experience.value}}" data-dtype="Number"/>
+	  </div>
+        </div>
+
+  {{!-- 
+          <div class="abilities grid grid-5col flex-group-center">
             {{#each system.da_attributes as |da_attribute key|}}
             <div class="ability">
               <label for="system.da_attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@da_attributes.{{key}}.mod" data-label="{{da_attribute.label}}">{{da_attribute.label}}</label></br>
@@ -66,75 +68,116 @@
             </div>
             {{/each}}
           </div>
-
-	<h3 align="center">Wounds</h3>
-	<div style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
-		<input type="checkbox" id="wound1" name="wounds" value="Wound1">
-  		<label for="wound1">Wound 1</label>
-  		<input type="checkbox" id="wound2" name="wounds" value="Wound2">
-  		<label for="wound2">Wound 2</label>
-  		<input type="checkbox" id="wound3" name="wounds" value="Wound3">
-  		<label for="wound3">Wound 3</label>
-	</div>
-
-	<h3 align="center">Scars</h3>
-        {{!-- For the main features list, span the right two columns --}}
-        <section class="main grid-span-2">
-          {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          {{> "systems/dead-air/templates/actor/parts/actor-features.hbs"}}
-        </section>
-
-      </section>
-    </div>
-
-    {{!-- Descriptors Tab --}}
-    <div class="tab biography" data-group="primary" data-tab="description">
-	<h2>Descriptors and Gifts</h2>
-	<label class="resource-label">Yesterday's World <a class="item-control data-chat" title="Chat" data-type="yesterday"><i class="fas fa-comment"></i></a></label>
-	<textarea type="text" name="system.yesterday" rows="4" placeholder="Description here">{{system.yesterday}}</textarea>
-	<label class="resource-label">Along The Way <a class="item-control data-chat" title="Chat" data-type="atw"><i class="fas fa-comment"></i></a></label>
-	<textarea type="text" name="system.atw" rows="4" placeholder="Description here">{{system.atw}}</textarea>
-	<label class="resource-label">Today's World <a class="item-control data-chat" title="Chat" data-type="atw"><i class="fas fa-comment"></i></a></label>
-	<textarea type="text" name="system.today" rows="4" placeholder="Description here">{{system.today}}</textarea>
-	<label class="resource-label">Tomorrow's World <a class="item-control data-chat" title="Chat" data-type="atw"><i class="fas fa-comment"></i></a></label>
-	<textarea type="text" name="system.tomorrow" rows="4" placeholder="Description here">{{system.tomorrow}}</textarea>
-	<h2>Bonds</h2>
-	<label class="resource-label"><a class="item-control data-chat" title="Chat" data-type="atw"><i class="fas fa-comment"></i></a></label>
-	<textarea type="text" name="system.bonds" rows="4" placeholder="Description here">{{system.bonds}}</textarea>
-	<h2>Survival Instinct</h2>
-	<label class="resource-label"><a class="item-control data-chat" title="Chat" data-type="atw"><i class="fas fa-comment"></i></a></label>
-	<textarea type="text" name="system.instinct" rows="4" placeholder="Description here">{{system.instinct}}</textarea>
-    </div>
+    --}}
 
 
-    {{!-- Descriptors Tab --}}
-    <div class="tab biography" data-group="primary" data-tab="notinuse">
-      {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
-      {{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}
-    </div>
+  {{!-- Ability block  --}}
 
-    {{!-- Owned Items Tab --}}
-    <div class="tab items" data-group="primary" data-tab="items">
-       {{> "systems/dead-air/templates/actor/parts/actor-items.hbs"}}
-        <h2>Preparation Level</h2>
-        <div class="abilities grid grid-3col flex-group-center">
-	    <div>
-	    <label class="resource-label">Ready</label>
-	    <input type="number" name="system.ready.value" value="{{system.ready.value}}"/>
+          <div class="grid grid-2col">
+            {{#each system.da_attributes as |da_attribute key|}}
+            <div class="ability">
+              <label class="resource-label rollable flexlarge align-left" data-daroll="yes" data-llabel="{{da_attribute.llabel}}">{{da_attribute.label}}</label>
 	    </div>
-	    <div>
-	    <label class="resource-label">Advanced</label>
-	    <input type="number" name="system.advanced.value" value="{{system.advanced.value}}"/>
-	    </div>
-	    <div>
-	    <label class="resource-label">Apocalyptic</label>
-	    <input type="number" name="system.apocalyptic.value" value="{{system.apocalyptic.value}}"/>
-	    </div>
-	</div>
-    </div>
+	    <div class="">
+                <span id="{{da_attribute.llabel}}-1" class="dot rollable" data-index="1" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
+                <span id="{{da_attribute.llabel}}-2" class="dot rollable" data-index="2" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
+                <span id="{{da_attribute.llabel}}-3" class="dot rollable" data-index="3" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
+                <span id="{{da_attribute.llabel}}-4" class="dot rollable" data-index="4" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
+                <span id="{{da_attribute.llabel}}-5" class="dot rollable" data-index="5" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
+                <span id="{{da_attribute.llabel}}-6" class="dot rollable" data-index="6" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
+            </div>
+            {{/each}}
+          </div>
 
-  </section>
+	  <h3 align="center">Wounds</h3>
+
+	  <div class="grid grid-4col">
+	    <div>
+	      <input type="checkbox" id="wound1" name="wounds" value="Wound1"><br>
+  	      <input type="checkbox" id="wound2" name="wounds" value="Wound2"><br>
+  	      <input type="checkbox" id="wound3" name="wounds" value="Wound3">
+	    </div>
+
+  	    <div class="grid-span-3">
+	      <input type="text" name="wound1" value="{{system.wound1}}" placeholder="Wound 1"><br>
+	      <input type="text" name="wound2" value="{{system.wound2}}" placeholder="Wound 2"><br>
+	      <input type="text" name="wound3" value="{{system.wound3}}" placeholder="Wound 3">
+	    </div>
+	  </div>
+
+	  <h3 align="center">Scars</h3>
+	  <div class="grid grid-4col">
+	    <div>
+	      <input type="checkbox" id="scar1" name="scar" value="Scar1"><br>
+  	      <input type="checkbox" id="scar2" name="scar" value="Scar2"><br>
+  	      <input type="checkbox" id="scar3" name="scar" value="Scar3">
+	    </div>
+
+  	    <div class="grid-span-3">
+	      <input type="text" name="scar1" value="{{system.scar1}}" placeholder="Scar 1"><br>
+	      <input type="text" name="scar2" value="{{system.scar2}}" placeholder="Scar 2"><br>
+	      <input type="text" name="scar3" value="{{system.scar3}}" placeholder="Scar 3">
+	    </div>
+	  </div>
+
+	  <h3 align="center">Iconic Items</h3>
+	  <div class="grid grid-4col">
+	    <div>
+	      <input type="checkbox" id="iconic1" name="iconic" value="item1"><br>
+  	      <input type="checkbox" id="iconic2" name="iconic" value="item2"><br>
+  	      <input type="checkbox" id="iconic3" name="iconic" value="item3">
+	    </div>
+
+  	    <div class="grid-span-3">
+	      <input type="text" name="iconic1" value="{{system.iconic1}}" placeholder="Item 1"><br>
+	      <input type="text" name="iconic2" value="{{system.iconic2}}" placeholder="Item 2"><br>
+	      <input type="text" name="iconic3" value="{{system.iconic3}}" placeholder="Item 3">
+	    </div>
+	  </div>
+
+          <h3 align="center">Preparation Level</h3>
+          <div class="grid grid-2col">
+            <div class="ability">
+              <label for="system.ready.value" class="resource-label rollable flexlarge align-left" data-daroll="yes" data-llabel="test">Ready</label>
+	    </div>
+	    <div class="">
+                <span class="dot rollable" data-index="1" data-label="Ready"></span>
+                <span class="dot rollable" data-index="2" data-label="Ready"></span>
+                <span class="dot rollable" data-index="3" data-label="Ready"></span>
+                <span class="dot rollable" data-index="4" data-label="Ready"></span>
+            </div>
+          </div>
+
+          <div class="grid grid-2col">
+            <div class="ability">
+              <label for="system.advanced.value" class="resource-label rollable flexlarge align-left" data-label="{{da_attribute.label}}">Advanced</label>
+	    </div>
+	    <div class="">
+                <span class="dot rollable" data-index="1" data-label="Advanced"></span>
+                <span class="dot rollable" data-index="2" data-label="Advanced"></span>
+                <span class="dot rollable" data-index="3" data-label="Advanced"></span>
+                <span class="dot rollable" data-index="4" data-label="Advanced"></span>
+                <span class="dot rollable" data-index="5" data-label="Advanced"></span>
+                <span class="dot rollable" data-index="6" data-label="Advanced"></span>
+            </div>
+          </div>
+
+          <div class="grid grid-2col">
+            <div class="ability">
+              <label for="system.apocalyptic.value" class="resource-label rollable flexlarge align-left" data-label="{{da_attribute.label}}">Apocalyptic</label>
+	    </div>
+	    <div class="">
+                <span class="dot rollable" data-index="1" data-label="Apocalyptic"></span>
+                <span class="dot rollable" data-index="2" data-label="Apocalyptic"></span>
+                <span class="dot rollable" data-index="3" data-label="Apocalyptic"></span>
+                <span class="dot rollable" data-index="4" data-label="Apocalyptic"></span>
+                <span class="dot rollable" data-index="5" data-label="Apocalyptic"></span>
+                <span class="dot rollable" data-index="6" data-label="Apocalyptic"></span>
+                <span class="dot rollable" data-index="7" data-label="Apocalyptic"></span>
+                <span class="dot rollable" data-index="8" data-label="Apocalyptic"></span>
+            </div>
+          </div>
+     </div>
 </form>
 
 {{log system}}
-

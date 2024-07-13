@@ -74,6 +74,10 @@
   grid-column-start: 2;
 }
 
+.grid-start-span2 {
+  grid-column-start: span 2;
+}
+
 .grid-start-3 {
   grid-column-start: 3;
 }
@@ -204,44 +208,86 @@
 }
 
 /* Styles limited to dead-air sheets */
+
 .dead-air .item-form {
   font-family: "Roboto", sans-serif;
 }
 .dead-air .sheet-header {
-  flex: 0 auto;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
   margin-bottom: 10px;
+  background-color: white;
+  outline-style: solid;
+  outline-color: white;
+  outline-width: 20px;
 }
 .dead-air .sheet-header .profile-img {
-  flex: 0 0 100px;
-  height: 100px;
-  margin-right: 10px;
 }
 .dead-air .sheet-header .header-fields {
-  flex: 1;
 }
-.dead-air .sheet-header h1.charname {
+.dead-air .sheet-body h1.charname {
   height: 50px;
   padding: 0px;
   margin: 5px 0;
   border-bottom: 0;
 }
-.dead-air .sheet-header h1.charname input {
+.dead-air .sheet-body h1.charname input {
   width: 100%;
   height: 100%;
   margin: 0;
+  color: #33cc33;
 }
+
+.dead-air .circleinput {
+  background-color: #fff;
+  border: 2px solid teal;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 28px;
+  width: 28px;
+}
+
+.dead-air .dot {
+  height: 14px;
+  width: 14px;
+  border: 1px solid #000;
+  display: inline-block;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dead-air .dot[data-state="x"] {
+  height: 14px;
+  width: 14px;
+  border: 1px solid #000;
+  background-color: black;
+  display: inline-block;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dead-air .circleinputdotted {
+  background-color: #fff;
+  border: 2px dotted teal;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 28px;
+  width: 28px;
+}
+
 .dead-air .sheet-tabs {
   flex: 0;
+  background-color: white;
+  outline-style: solid;
+  outline-color: white;
+  outline-width: 20px;
 }
 .dead-air .sheet-body,
 .dead-air .sheet-body .tab,
 .dead-air .sheet-body .tab .editor {
   height: 100%;
+  background-color: white;
+  outline-style: solid;
+  outline-color: white;
+  outline-width: 20px;
 }
 .dead-air .tox .tox-editor-container {
   background: #fff;
@@ -252,6 +298,13 @@
 .dead-air .resource-label {
   font-weight: bold;
 }
+
+.dead-air .description-label {
+  font-family: Arial, Helvetica, san-serif;
+  font-weight: italic;
+
+}
+
 .dead-air .items-header {
   height: 28px;
   margin: 2px 0;

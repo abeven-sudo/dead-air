@@ -12,7 +12,7 @@ export class DeadAirActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['dead-air', 'sheet', 'actor'],
-      width: 600,
+      width: 900,
       height: 600,
       tabs: [
         {
@@ -183,7 +183,47 @@ export class DeadAirActorSheet extends ActorSheet {
         li.addEventListener('dragstart', handler, false);
       });
     }
-  }
+ 
+    const element = event.currentTarget;
+    const dataset = element.dataset;
+
+    console.log(dataset);
+
+    function iterateattrib(num, value, stat) {
+            for(let i = 1; i <= num; i++){
+                var Element = document.getElementById(`${stat}-${i}`);
+
+               if (i <= value) {
+                    Element.dataset.state = "x";
+                } else {
+                    Element.dataset.state = "/";                 
+                }
+            }
+     }
+
+    // Get all the attribute values
+        let attributereference = `this.actor.system.da_attributes`;
+        let attributescore = eval(attributereference);
+
+        let body = attributescore.body.value;
+        let determination = attributescore.determination.value;
+        let mind = attributescore.mind.value;
+        let presence = attributescore.presence.value;
+        let reaction = attributescore.reaction.value;
+
+     // Update the screen DOM
+        
+        iterateattrib(6, body, "body");
+        iterateattrib(6, determination, "determination");
+        iterateattrib(6, mind, "mind");
+        iterateattrib(6, presence, "presence");
+        iterateattrib(6, reaction, "reaction");
+
+
+
+
+
+ }
 
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
@@ -223,28 +263,51 @@ export class DeadAirActorSheet extends ActorSheet {
     const dataset = element.dataset;
 
     // Handle item rolls.
-    if (dataset.rollType) {
-      if (dataset.rollType == 'item') {
-        const itemId = element.closest('.item').dataset.itemId;
-        const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
-      }
-    }
+    if (dataset.testroll) {
 
-    // Handle rolls that supply the formula directly.
-    if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
-      roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
-      });
-      return roll;
+        function iterateattrib(num, value, stat) {
+            for(let i = 1; i <= num; i++){
+                var Element = document.getElementById(`${stat}-${i}`);
+
+               if (i <= value) {
+                    Element.dataset.state = "x"; 
+                } else {
+                    Element.dataset.state = "/";                 
+                }
+            }
+        }
+
+     // Get what was clicked on
+        let attribute = dataset.label;
+        let index = dataset.index;
+
+     // Update the attribute
+        let doeval = eval(`this.actor.system.da_attributes.${attribute}.value = ${index};`);
+        eval(doeval);
+
+    // Get all the attribute values
+        let attributereference = `this.actor.system.da_attributes`;
+        let attributescore = eval(attributereference);
+
+        let body = attributescore.body.value;
+        let determination = attributescore.determination.value;
+        let mind = attributescore.mind.value;
+        let presence = attributescore.presence.value;
+        let reaction = attributescore.reaction.value;
+
+     // Update the screen DOM
+        
+        iterateattrib(6, body, "body");
+        iterateattrib(6, determination, "determination");
+        iterateattrib(6, mind, "mind");
+        iterateattrib(6, presence, "presence");
+        iterateattrib(6, reaction, "reaction");
+
     }
 
     // Dead Air Roller
     if (dataset.daroll) {
+
       // Detect a Dead Air roll from the attribute part of the sheet 
 
       let content = `<label for="numberdice">How many regular dice to roll:</label>
@@ -299,19 +362,24 @@ export class DeadAirActorSheet extends ActorSheet {
                            OL = 0;
                       }
 
-// Build the output
+                      // Build the output
 
-let rolltt1 = await stdroll.getTooltip();
-let rolltt2 = await advroll.getTooltip();
-let rolltt3 = await disroll.getTooltip();
+                      let rolltt1 = await stdroll.getTooltip();
+                      let rolltt2 = await advroll.getTooltip();
+                      let rolltt3 = await disroll.getTooltip();
 
-if (success === "yes") {
-	content = `<p style="color:green;">Success</p><p style="text-align:center">Opposition Level Beaten: ` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
-             } else {
-	content = `<p style="color:red;">Failure</p><p style="text-align:center">Opposition Level Beaten: ` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
-	     }
+                      const template_file = "systems/dead-air/templates/dialogue/diceroll.html";
+                      const rendered_html = await renderTemplate(template_file, {});
 
-ChatMessage.create({content: `${content}`});
+//                      if (success === "yes") {
+//                          content = html;
+//	                  content = `<input class="bigcirclegreen" type="text" value="${OL}" data-dtype="Number">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
+//                                             } else {
+//                          content = html;
+//	                  content = `<input class="bigcirclered">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
+//	                                     }
+
+                      ChatMessage.create({content: `${rendered_html}`});
               }
         }
     }
