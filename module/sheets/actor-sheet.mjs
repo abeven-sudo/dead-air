@@ -425,26 +425,22 @@ function calculatedicetoroll(html, actor, checkObj) {
      }
 
   // Failed advantage dice could reduce the outcome to a failed state or lower state of success
-    let reduction = Number(checkObj.advantagedice) - Number(checkObj.advantageroll[0]);
+     if (typeof checkObj.advantageroll !== "undefined") {
+       let reduction = Number(checkObj.advantagedice) - Number(checkObj.advantageroll[0]);
 
-    console.log(reduction);
-        
-    if ( reduction > 0 ) {
-       let reductionstep = checkObj.outcomenumber - reduction;
-
-console.log(checkObj.outcomenumber);
-    console.log(reductionstep);
-
-         if ( Number(reductionstep) < 0 ) {
-           checkObj.outcome = "Check failed!";
-         }
-         if ( Number(reductionstep) === 0 ) {
-           checkObj.outcome = "Outcome with a cost";
-         }
-         if ( Number(reductionstep) === 1 ) {
-           checkObj.outcome = "Standard outcome";
-         }
-    }
+      if ( reduction > 0 ) {
+         let reductionstep = checkObj.outcomenumber - reduction;
+           if ( Number(reductionstep) < 0 ) {
+             checkObj.outcome = "Check failed!";
+           }
+           if ( Number(reductionstep) === 0 ) {
+             checkObj.outcome = "Outcome with a cost";
+           }
+           if ( Number(reductionstep) === 1 ) {
+             checkObj.outcome = "Standard outcome";
+           }
+       }
+     }
 
     let content = `<div class="grid grid-2col">
                        <div>

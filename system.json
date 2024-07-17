@@ -20,7 +20,7 @@
       "thumbnail": "systems/dead-air/assets/dead-air-splash.jpg"
     }
   ],
-  "version": "0.0.1",
+  "version": "0.1.0",
   "compatibility": {
     "minimum": 11,
     "verified": "11.315"
