@@ -4,6 +4,115 @@
   font-family: "Roboto", sans-serif;
 }
 
+/* Roll Messages */
+
+/* Single Chat Message */
+.chat-message {
+  margin: 3px;
+  padding: 5px;
+  font-size: var(--font-size-14);
+  background: white;
+  border: 2px solid #6f6c66;
+  border-radius: 5px;
+}
+
+.bigcirclegreen {
+  background-color: #fff;
+  border: 2px solid teal;
+  border-radius: 50%;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  font-size: 30px;
+  height: 40px;
+  width: 40px;
+}
+
+.chat-message .message-header {
+  line-height: 20px;
+}
+.chat-message .message-header .message-sender {
+  flex: 3;
+  margin: 0;
+  white-space: nowrap;
+}
+.chat-message .message-header .message-metadata {
+  flex: 2;
+  text-align: right;
+  font-size: var(--font-size-12);
+}
+.chat-message .message-header .flavor-text,
+.chat-message .message-header .whisper-to {
+  flex: 0 0 100%;
+  font-size: var(--font-size-12);
+}
+.chat-message .message-content {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  word-break: break-word;
+}
+.chat-message.emote {
+  background: #f3edde;
+  border: 2px solid #887c5d;
+}
+.chat-message.whisper {
+  background: #e8e8ef;
+  border: 2px solid #545469;
+}
+.chat-message.blind {
+  background: #f5eaf5;
+  border: 2px solid #6b476b;
+}
+.chat-message .cards-notification {
+  align-items: center;
+}
+.chat-message .cards-notification > .icon {
+  flex: 0 0 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+.chat-message .cards-notification > p {
+  margin: 0;
+}
+/* New Chat Message Form */
+#chat-form {
+  height: 100px;
+  flex: 0 0 100px;
+  margin: 0 6px 6px;
+}
+#chat-form textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  font-family: var(--font-primary);
+  background: url(../ui/parchment.jpg) repeat;
+}
+
+/* Popup window content */
+
+.window-app .window-content {
+  margin: 3px;
+  padding: 5px;
+  font-size: var(--font-size-14);
+  background: white;
+  border: 2px solid #6f6c66;
+  border-radius: 5px;
+}
+
+.window-app .window-content .inputcircle {
+  background-color: #fff;
+  border: 2px solid teal;
+  border-radius: 50%;
+  cursor: pointer;
+  text-align: center;
+  height: 28px;
+  width: 28px;
+}
+
+/* Used styling */
+
 .rollable:hover, .rollable:focus {
   color: #000;
   text-shadow: 0 0 10px red;
@@ -35,41 +144,6 @@
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
-.grid-6col {
-  grid-column: span 6/span 6;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
-.grid-7col {
-  grid-column: span 7/span 7;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-}
-
-.grid-8col {
-  grid-column: span 8/span 8;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-}
-
-.grid-9col {
-  grid-column: span 9/span 9;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-}
-
-.grid-10col {
-  grid-column: span 10/span 10;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-}
-
-.grid-11col {
-  grid-column: span 11/span 11;
-  grid-template-columns: repeat(11, minmax(0, 1fr));
-}
-
-.grid-12col {
-  grid-column: span 12/span 12;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-}
-
 .grid-start-2 {
   grid-column-start: 2;
 }
@@ -82,41 +156,6 @@
   grid-column-start: 3;
 }
 
-.grid-start-4 {
-  grid-column-start: 4;
-}
-
-.grid-start-5 {
-  grid-column-start: 5;
-}
-
-.grid-start-6 {
-  grid-column-start: 6;
-}
-
-.grid-start-7 {
-  grid-column-start: 7;
-}
-
-.grid-start-8 {
-  grid-column-start: 8;
-}
-
-.grid-start-9 {
-  grid-column-start: 9;
-}
-
-.grid-start-10 {
-  grid-column-start: 10;
-}
-
-.grid-start-11 {
-  grid-column-start: 11;
-}
-
-.grid-start-12 {
-  grid-column-start: 12;
-}
 
 .grid-span-2 {
   grid-column-end: span 2;
@@ -128,38 +167,6 @@
 
 .grid-span-4 {
   grid-column-end: span 4;
-}
-
-.grid-span-5 {
-  grid-column-end: span 5;
-}
-
-.grid-span-6 {
-  grid-column-end: span 6;
-}
-
-.grid-span-7 {
-  grid-column-end: span 7;
-}
-
-.grid-span-8 {
-  grid-column-end: span 8;
-}
-
-.grid-span-9 {
-  grid-column-end: span 9;
-}
-
-.grid-span-10 {
-  grid-column-end: span 10;
-}
-
-.grid-span-11 {
-  grid-column-end: span 11;
-}
-
-.grid-span-12 {
-  grid-column-end: span 12;
 }
 
 .flex-group-center,

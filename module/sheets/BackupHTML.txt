@@ -1,0 +1,25 @@
+
+      let content = `<form class="check">
+                         <h3 align="center">Check</h3>
+                         <div align="center">
+                             <p>${attributerolled} Check</p>
+                             <p>${attributerolled} ${attributescore}</p>
+		             <label for="OL">Opposition Level of check<br></label>
+                             <input class="inputcircle" name="OL" type="number" value="1"></input><br>
+                         </div>
+                         <h3 align="center">Dice</h3>
+	                 <div class="grid grid-3col">
+                             <div>
+		                 <label for="numberdice">Regular</label>
+                                 <input name="numberdice" type="number" value="1"></input>
+                             </div>
+                             <div>
+                                 <label for="numadvdice">Advantage</label>
+                                 <input name="numadvdice" type="number" value="0"></input>
+                             </div>
+                             <div>
+                                 <label for="numdisdice">Disadvantage</label>
+                                 <input name="numdisdice" type="number" value="0"></input>
+                             </div>
+                         <div>
+                     </form>`;

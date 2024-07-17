@@ -7,6 +7,7 @@ import { DeadAirItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { DEAD_AIR } from './helpers/config.mjs';
+import { loadHelpers } from './helpers/helpers.mjs'
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -20,6 +21,9 @@ Hooks.once('init', function () {
     DeadAirItem,
     rollItemMacro,
   };
+
+  // Make helpers accessible to the system
+  loadHelpers();
 
   // Add custom constants for configuration.
   CONFIG.DEAD_AIR = DEAD_AIR;

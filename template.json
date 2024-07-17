@@ -3,102 +3,199 @@
     "types": ["character", "npc"],
     "templates": {
       "base": {
-        "health": {
-          "value": 10,
-          "min": 0,
-          "max": 10
-        },
-        "power": {
-          "value": 5,
-          "min": 0,
-          "max": 5
-        },
-        "biography": ""
       }
     },
     "character": {
-      "templates": ["base"],
-      "attributes": {},
-      "yesterday": "",
-      "atw": "",
-      "ready": {
-          "value": 0,
-	  "min": 0,
-	  "max": 4
+      "templates": ["base"], 
+      "description": "",
+      "archetypes": {
+        "archetype1": "",
+        "archetype2": ""
       },
-      "advanced": {
-          "value": 0,
-	  "min": 0,
-	  "max": 6
+      "archetypedata": {
+         "Athlete": {
+            "value": "Athlete"
+          },
+          "Criminal": {
+            "value": "Criminal"
+          },
+          "Expert": {
+            "value": "Expert"
+          },
+          "Explorer": {
+            "value": "Explorer"
+          },
+          "Fighter": {
+            "value": "Fighter"
+          },
+          "Leader": {
+            "value": "Leader"
+          },
+          "Manipulator": {
+            "value": "Manipulator"
+          },
+          "Savant": {
+            "value": "Savant"
+          },
+          "Soldier": {
+            "value": "Soldier (BNW)"
+          },
+          "Provectus": {
+            "value": "Provectus (BNW)"
+          },
+          "Crimson Hunter": {
+            "value": "Crimson Hunter (BNW)"
+          },
+          "Lone Wolf": {
+            "value": "Lone Wolf (BNW)"
+          },
+          "Finder": {
+            "value": "Finder (BNW)"
+          }
       },
-      "apocalyptic": {
-          "value": 0,
-	  "min": 0,
-	  "max": 8
+      "descriptors_gifts": {
+        "yesterday": {
+          "label": "Yesterday's World",
+          "descriptor": "",
+          "gift": ""
+        },
+        "atw": {
+          "label": "Along The Way",
+          "descriptor": "",
+          "gift": ""
+        },
+        "today": {
+          "label": "Today's World",
+          "descriptor": "",
+          "gift": ""
+        },
+        "tomorrow": {
+          "label": "Tomorrow's World",
+          "descriptor": "",
+          "gift": ""
+        }
       },
-      "da_attributes": {
-        "body": {
+      "trackedresources": {
+        "soma": {
+          "label": "Soma",
+          "base": 10,
+          "value": 10
+        },
+        "pnr": {
+          "label": "PNR",
+          "base": 10,
+          "value": 0
+        },
+        "experience": {
+          "label": "XP",
+          "value": 0
+        },
+        "advantagedice": 0,
+        "disadvantagedice": 0
+      },
+      "attributes": {
+        "Body": {
           "value": 1,
-	  "min": 0,
-	  "max": 6,
-	  "label": "Body",
+	        "min": 0,
+	        "max": 6,
+	        "label": "Body",
           "llabel": "body"
         },
-        "reaction": {
+        "Reaction": {
           "value": 1,
-	  "min": 0,
-	  "max": 6,
-	  "label": "Reaction",
+	        "min": 0,
+	        "max": 6,
+	        "label": "Reaction",
           "llabel": "reaction"
         },        
-        "mind": {
+        "Mind": {
           "value": 1,
-	  "min": 0,
-	  "max": 6,
-	  "label": "Mind",
+	        "min": 0,
+	        "max": 6,
+	        "label": "Mind",
           "llabel": "mind"
         },
-        "presence": {
+        "Presence": {
           "value": 1,
-	  "min": 0,
-	  "max": 6,
-	  "label": "Presence",
+	        "min": 0,
+	        "max": 6,
+	        "label": "Presence",
           "llabel": "presence"
         },
-        "determination": {
+        "Determination": {
           "value": 1,
-	  "min": 0,
-	  "max": 6,
-	  "label": "Determination",
+	        "min": 0,
+	        "max": 6,
+	        "label": "Determination",
           "llabel": "determination"
         }
       },
-      "abilities": {
-        "str": {
-          "value": 10
+      "wounds": {
+        "wound1": {
+          "checked": "",
+          "description": ""
         },
-        "dex": {
-          "value": 10
+        "wound2": {
+          "checked": "",
+          "description": ""
         },
-        "con": {
-          "value": 10
-        },
-        "int": {
-          "value": 10
-        },
-        "wis": {
-          "value": 10
-        },
-        "cha": {
-          "value": 10
+        "wound3": {
+          "checked": "",
+          "description": ""
         }
+      },
+      "scars": {
+        "scar1": {
+          "checked": "",
+          "description": ""
+        },
+        "scar2": {
+          "checked": "",
+          "description": ""
+        },
+        "scar3": {
+          "checked": "",
+          "description": ""
+        }
+      },
+      "iconics": {
+        "iconic1": {
+          "checked": "",
+          "description": ""
+        },
+        "iconic2": {
+          "checked": "",
+          "description": ""
+        },
+        "iconic3": {
+          "checked": "",
+          "description": ""
+        }
+      },
+      "preparation": {
+        "Ready": {
+          "label": "Ready",
+          "max": 4,
+          "value": 0
+        },
+        "Advanced": {
+          "label": "Advanced",
+          "max": 6,
+          "value": 0
+        },
+        "Apocalyptic": {
+          "label": "Apocalyptic",
+          "max": 8,
+          "value": 0
+        }    
       }
-    },
+    }
+  },
     "npc": {
       "templates": ["base"],
       "cr": 0
     }
-  },
+,
   "Item": {
     "types": ["item", "feature", "spell", "scar"],
     "templates": {

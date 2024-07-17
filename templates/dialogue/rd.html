@@ -1,0 +1,54 @@
+<form class="check">
+                         <section>
+                         <h3 align="center">Opposition Level and Result</h3>
+                         <div class="flex-group-center">
+                             <div>
+                                            <fieldset>
+                                                <div>
+                                                    <p>Average</p>
+                                                    <label for="OL1">3</label>
+                                                    <input type="radio" id="OL1" name="OL" value="3"/>
+                                                    <label for="OL2">4</label>
+                                                    <input type="radio" id="OL2" name="OL" value="4"/>
+                                                    <label for="OL3">5</label>
+                                                    <input type="radio" id="OL3" name="OL" checked="true" value="5"/>
+                                                </div>
+                                                <div>
+                                                    <p>A compelling challenge</p>
+                                                    <label for="OL4">6</label>
+                                                    <input type="radio" id="OL4" name="OL" value="6"/>
+                                                    <label for="OL5">7</label>
+                                                    <input type="radio" id="OL5" name="OL" value="7"/>
+                                                </div>
+                                                <div>
+                                                    <p>A demanding challenge</p>
+                                                    <label for="OL6">8</label>
+                                                    <input type="radio" id="OL6" name="OL" value="8"/>
+                                                    <label for="OL7">9</label>
+                                                    <input type="radio" id="OL7" name="OL" value="9"/>
+                                                </div>
+                                            </div>    
+                                            </fieldset>
+                             </div>
+                             <div>
+                                 <p>What result level do you want?</p>
+                                 <select name="outcome" id="outcome" value="outcome">
+                                     <option select value="0">Outcome with a cost +0 OL</option>
+                                     <option value="1">Standard outcome +1 OL</option>
+                                     <option value="2">Outcome with an increment  +2 OL</option>
+                                 </select>
+                             </div>
+                         </div>
+                         <h3 align="center">Base Successes</h3>
+                         <p>Attribute Checked {{attributeslabel}}</p>
+                         <p>{{attributescore}} automatic successes</p>
+                         <h3 align="center">Soma</h3>
+	                 <label for="soma">How much Soma do you want to use?</label>
+                         <input name="soma" type="number" value="0"></input>
+                         <h3 align="center">Modifier Dice</h3>
+	                 <label for="advdice">Advantage Dice</label>
+                         <input name="advdice" type="number" value="{{advantagedice}}"></input>
+	                 <label for="disdice">Disadvantage Dice</label>
+                         <input name="disdice" type="number" value="{{disadvantagedice}}"></input>
+                         </section>
+                     </form>

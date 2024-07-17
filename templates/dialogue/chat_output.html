@@ -1,0 +1,32 @@
+<div class="grid grid-2col flex-group-center">
+    <div class="flex-group-center">
+        <p>Target OL</p>
+        <p class="bigcirclegreen">{{OL}}</p>
+    </div>
+    <div class="flex-group-center">
+        <p>Rolled OL</p>
+        <p class="bigcirclegreen">{{successes}}</p>
+    </div>
+ </div>
+ <div align="center">
+     <h3 align="center">Result</h3>
+     <p align="center">{{outcome}}</p>
+ </div>
+ <div class="dice-tooltip">
+     <section class="tooltip-part">
+         <div class="dice">
+                 <h3>Standard Dice</h3>
+             {{#if standarddiceoutput}}
+                     {{standarddiceoutput}}
+             {{/if}}
+             {{#if advantagediceoutput}}
+                 <h3>Advantage Dice</h3>
+                     {{advantagediceoutput}}
+             {{/if}}
+             {{#if disadvantagediceoutput}}
+                 <h3>Disadvantage Dice</h3>
+                     {{advantagediceoutput}}
+             {{/if}}
+  	 </div>
+     </section>
+</div>

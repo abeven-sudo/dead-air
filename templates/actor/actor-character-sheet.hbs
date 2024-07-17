@@ -6,9 +6,22 @@
   {{!-- Name, Descriptions and Image Header --}}
 
     <div class="grid-start-span2">
-      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+      <div class="grid grid-2col">
+          <div>
+              <img src="systems/dead-air/assets/dead-air-logo.png" height="95" width="177"/>
+          </div>
+          <div>
+              <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+              <select name="system.archetypes.archetype1" id="archetype1" value="system.archetypes.archetype1">
+                  {{selectOptions system.archetypedata selected=system.archetypes.archetype1}}
+              </select>
+              <select name="system.archetypes.archetype2" id="archetype2" value="system.archetypes.archetype2">
+                  {{selectOptions system.archetypedata selected=system.archetypes.archetype2}}
+              </select>
+          </div>
+      </div>
       <label class="charname"><a class="item-control data-chat" title="Chat" data-type="yesterday"></a></label>
-      <textarea class="description-label" type="text" name="system.description" rows="8" placeholder="Description here">{{system.description}}</textarea>
+      <textarea class="description-label" type="text" name="system.description" rows="5" placeholder="Description here">{{system.description}}</textarea>
     </div>
 
     <div class="flex-group-center">
@@ -19,15 +32,18 @@
 
     <div class="grid-start-span2">
 	<h3>Descriptors and Gifts</h3>
+        {{#each system.descriptors_gifts as |descript_gift key|}}
+            <div class="grid grid-4col">
+                <div>
+	            <label class="description-label">{{descript_gift.label}}</label>
+                </div>
+                <div>
+                    <input class="description-label grid-span3" name="system.descriptors_gifts.{{@key}}.descriptor" value="{{descript_gift.descriptor}}" placeholder="Descriptor here" size="60">
+                </div>
+            </div>
+            <textarea class="description-label" type="text" name="system.descriptors_gifts.{{@key}}.gift" rows="4" placeholder="Gift here">{{descript_gift.gift}}</textarea>
+        {{/each}}
 
-	<label class="description-label">Yesterday's World </label>
-	<textarea class="description-label" type="text" name="system.yesterday" rows="4" placeholder="Description here">{{system.yesterday}}</textarea>
-	<label class="description-label">Along The Way </label>
-	<textarea class="description-label" type="text" name="system.atw" rows="4" placeholder="Description here">{{system.atw}}</textarea>
-	<label class="description-label">Today's World </label>
-	<textarea class="description-label" type="text" name="system.today" rows="4" placeholder="Description here">{{system.today}}</textarea>
-	<label class="description-label">Tomorrow's World </label>
-	<textarea class="description-label" type="text" name="system.tomorrow" rows="4" placeholder="Description here">{{system.tomorrow}}</textarea>
 	<h3>Bonds</h3>
 	<label class="description-label"></label>
 	<textarea class="description-label" type="text" name="system.bonds" rows="4" placeholder="Description here">{{system.bonds}}</textarea>
@@ -39,143 +55,111 @@
   {{!-- Soma, PNR, Exp, Attributes, Bonds, Survival Instinct last columns --}}
 
     <div>
+	<h3>Resources</h3> 
         <div class="grid grid-3col flex-group-center">
           <div>
-	  <label for="system.soma.value" class="resource-label">Soma</label><br>
-          <input class="circleinput" type="text" name="system.soma.value" value="{{system.soma.value}}" data-dtype="Number"/><br>
+	  <label for="soma" class="resource-label">{{system.trackedresources.soma.label}}</label><br>
+          <input class="circleinput" id="soma" type="text" name="system.trackedresources.soma.base" value="{{system.trackedresources.soma.base}}" data-dtype="Number"/><br>
           <span> | </span><br>
-          <input class="circleinputdotted" type="text" name="system.soma.max" value="{{system.soma.max}}" data-dtype="Number"/>
+          <input class="circleinputdotted" is="soma" type="text" name="system.trackedresources.soma.value" value="{{system.trackedresources.soma.value}}" data-dtype="Number"/>
  	  </div>
 	  <div>
-          <label for="system.PNR.value" class="resource-label">PNR</label><br>
-          <input class="circleinput" type="text" name="system.PNR.value" value="{{system.PNR.value}}" data-dtype="Number"/><br>
+          <label for="pointofnoreturn" class="resource-label">{{system.trackedresources.pnr.label}}</label><br>
+          <input class="circleinput" type="text" name="system.trackedresources.pnr.base" value="{{system.trackedresources.pnr.base}}" data-dtype="Number"/><br>
           <span> | </span><br>
-          <input class="circleinputdotted" type="text" name="system.PNR.max" value="{{system.PNR.max}}" data-dtype="Number"/>
+          <input class="circleinputdotted" type="text" name="system.trackedresources.pnr.value" value="{{system.trackedresources.pnr.value}}" data-dtype="Number"/>
 	  </div>
 	  <div>
-          <label for="system.attributes.experience.value" class="resource-label">XP</label><br>
-          <input class="circleinput" type="text" name="system.attributes.experience.value" value="{{system.attributes.experience.value}}" data-dtype="Number"/>
+          <label for="experience" class="resource-label">{{system.trackedresources.experience.label}}</label><br>
+          <input class="circleinput" type="text" name="system.trackedresources.experience.value" value="{{system.trackedresources.experience.value}}" data-dtype="Number"/>
 	  </div>
         </div>
 
-  {{!-- 
-          <div class="abilities grid grid-5col flex-group-center">
-            {{#each system.da_attributes as |da_attribute key|}}
-            <div class="ability">
-              <label for="system.da_attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@da_attributes.{{key}}.mod" data-label="{{da_attribute.label}}">{{da_attribute.label}}</label></br>
-	      <input type="text" name="system.da_attributes.{{key}}.value" value="{{da_attribute.value}}" data-dtype="Number" max="{{da_attribute.max}}"/>
-              <button class="ability-mod rollable" data-daroll="yes" data-llabel="{{da_attribute.llabel}}"><i class="fas fa-dice"></i>{{localize "Roll"}}</button>
+  {{!-- Advantage and Disadvantage Dice last columns --}}
+
+    <div>
+	<h3>Advantage and Disadvantage Dice</h3> 
+        <div class="grid grid-2col flex-group-center">
+            <div>
+                <p class="resource-label">Advantage<input name="system.trackedresources.advantagedice" type="text" value="{{system.trackedresources.advantagedice}}"/></p>
             </div>
-            {{/each}}
-          </div>
-    --}}
+            <div>
+                <p class="resource-label">Disadvantage<input name="system.trackedresources.disadvantagedice" type="text" value="{{system.trackedresources.disadvantagedice}}"/></p>
+            </div>
+        </div>
 
-
-  {{!-- Ability block  --}}
-
+  {{!-- Attributes block, loop for each attribute, and number of dots from maximum --}}
+	<h3>Attributes</h3> 
           <div class="grid grid-2col">
-            {{#each system.da_attributes as |da_attribute key|}}
+            {{#each system.attributes as |attribute key|}}
             <div class="ability">
-              <label class="resource-label rollable flexlarge align-left" data-daroll="yes" data-llabel="{{da_attribute.llabel}}">{{da_attribute.label}}</label>
+              <label class="resource-label rollable flexlarge align-left" data-roll="yes" data-label="system.attributes.{{attribute.label}}" data-dotclick="yes">{{attribute.label}}</label>
 	    </div>
 	    <div class="">
-                <span id="{{da_attribute.llabel}}-1" class="dot rollable" data-index="1" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
-                <span id="{{da_attribute.llabel}}-2" class="dot rollable" data-index="2" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
-                <span id="{{da_attribute.llabel}}-3" class="dot rollable" data-index="3" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
-                <span id="{{da_attribute.llabel}}-4" class="dot rollable" data-index="4" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
-                <span id="{{da_attribute.llabel}}-5" class="dot rollable" data-index="5" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
-                <span id="{{da_attribute.llabel}}-6" class="dot rollable" data-index="6" data-label="{{da_attribute.llabel}}" data-testroll="yes"></span>
+                {{#numLoop attribute.max }}
+                    <span id="{{attribute.label}}-{{this}}" class="dot clickable" data-index="{{this}}" data-label="system.attributes.{{attribute.label}}" data-dotclick="yes"></span>
+                {{/numLoop}}
             </div>
             {{/each}}
           </div>
 
+  {{!-- Wounds counters and labels --}}
+
 	  <h3 align="center">Wounds</h3>
-
 	  <div class="grid grid-4col">
+            {{#each system.wounds as |wound key|}}
 	    <div>
-	      <input type="checkbox" id="wound1" name="wounds" value="Wound1"><br>
-  	      <input type="checkbox" id="wound2" name="wounds" value="Wound2"><br>
-  	      <input type="checkbox" id="wound3" name="wounds" value="Wound3">
+	        <input name="system.wounds.{{@key}}.checked" type="checkbox" {{checked wound.checked}}/>
 	    </div>
-
   	    <div class="grid-span-3">
-	      <input type="text" name="wound1" value="{{system.wound1}}" placeholder="Wound 1"><br>
-	      <input type="text" name="wound2" value="{{system.wound2}}" placeholder="Wound 2"><br>
-	      <input type="text" name="wound3" value="{{system.wound3}}" placeholder="Wound 3">
+                <input class="description-label" name="system.wounds.{{@key}}.description" id="wounds" type="text" value="{{wound.description}}">
 	    </div>
+            {{/each}}
 	  </div>
+
+  {{!-- Scars counters and labels --}}
 
 	  <h3 align="center">Scars</h3>
 	  <div class="grid grid-4col">
+            {{#each system.scars as |scar key|}}
 	    <div>
-	      <input type="checkbox" id="scar1" name="scar" value="Scar1"><br>
-  	      <input type="checkbox" id="scar2" name="scar" value="Scar2"><br>
-  	      <input type="checkbox" id="scar3" name="scar" value="Scar3">
+	        <input name="system.scars.{{@key}}.checked" type="checkbox" {{checked scar.checked}}/>
 	    </div>
-
   	    <div class="grid-span-3">
-	      <input type="text" name="scar1" value="{{system.scar1}}" placeholder="Scar 1"><br>
-	      <input type="text" name="scar2" value="{{system.scar2}}" placeholder="Scar 2"><br>
-	      <input type="text" name="scar3" value="{{system.scar3}}" placeholder="Scar 3">
+                <input class="description-label" name="system.scars.{{@key}}.description" id="scars" type="text" value="{{scar.description}}">
 	    </div>
+            {{/each}}
 	  </div>
+
+  {{!-- Iconic Items and labels --}}
 
 	  <h3 align="center">Iconic Items</h3>
 	  <div class="grid grid-4col">
+            {{#each system.iconics as |iconic key|}}
 	    <div>
-	      <input type="checkbox" id="iconic1" name="iconic" value="item1"><br>
-  	      <input type="checkbox" id="iconic2" name="iconic" value="item2"><br>
-  	      <input type="checkbox" id="iconic3" name="iconic" value="item3">
+	        <input name="system.iconics.{{@key}}.checked" type="checkbox" {{checked iconic.checked}}/>
 	    </div>
-
   	    <div class="grid-span-3">
-	      <input type="text" name="iconic1" value="{{system.iconic1}}" placeholder="Item 1"><br>
-	      <input type="text" name="iconic2" value="{{system.iconic2}}" placeholder="Item 2"><br>
-	      <input type="text" name="iconic3" value="{{system.iconic3}}" placeholder="Item 3">
+                <input class="description-label" name="system.iconics.{{@key}}.description" id="scars" type="text" value="{{iconic.description}}">
 	    </div>
+            {{/each}}
 	  </div>
 
+  {{!-- Preparation Levels --}}
+
           <h3 align="center">Preparation Level</h3>
-          <div class="grid grid-2col">
-            <div class="ability">
-              <label for="system.ready.value" class="resource-label rollable flexlarge align-left" data-daroll="yes" data-llabel="test">Ready</label>
-	    </div>
-	    <div class="">
-                <span class="dot rollable" data-index="1" data-label="Ready"></span>
-                <span class="dot rollable" data-index="2" data-label="Ready"></span>
-                <span class="dot rollable" data-index="3" data-label="Ready"></span>
-                <span class="dot rollable" data-index="4" data-label="Ready"></span>
-            </div>
-          </div>
 
           <div class="grid grid-2col">
+            {{#each system.preparation as |prep key|}}
             <div class="ability">
-              <label for="system.advanced.value" class="resource-label rollable flexlarge align-left" data-label="{{da_attribute.label}}">Advanced</label>
+              <label class="resource-label flexlarge align-left" data-label="{{prep.label}}">{{prep.label}}</label>
 	    </div>
 	    <div class="">
-                <span class="dot rollable" data-index="1" data-label="Advanced"></span>
-                <span class="dot rollable" data-index="2" data-label="Advanced"></span>
-                <span class="dot rollable" data-index="3" data-label="Advanced"></span>
-                <span class="dot rollable" data-index="4" data-label="Advanced"></span>
-                <span class="dot rollable" data-index="5" data-label="Advanced"></span>
-                <span class="dot rollable" data-index="6" data-label="Advanced"></span>
+                {{#numLoop prep.max }}
+                    <span id="{{prep.label}}-{{this}}" class="dot clickable" data-index="{{this}}" data-label="system.preparation.{{prep.label}}" data-dotclick="yes"></span>
+                {{/numLoop}}
             </div>
-          </div>
-
-          <div class="grid grid-2col">
-            <div class="ability">
-              <label for="system.apocalyptic.value" class="resource-label rollable flexlarge align-left" data-label="{{da_attribute.label}}">Apocalyptic</label>
-	    </div>
-	    <div class="">
-                <span class="dot rollable" data-index="1" data-label="Apocalyptic"></span>
-                <span class="dot rollable" data-index="2" data-label="Apocalyptic"></span>
-                <span class="dot rollable" data-index="3" data-label="Apocalyptic"></span>
-                <span class="dot rollable" data-index="4" data-label="Apocalyptic"></span>
-                <span class="dot rollable" data-index="5" data-label="Apocalyptic"></span>
-                <span class="dot rollable" data-index="6" data-label="Apocalyptic"></span>
-                <span class="dot rollable" data-index="7" data-label="Apocalyptic"></span>
-                <span class="dot rollable" data-index="8" data-label="Apocalyptic"></span>
-            </div>
+            {{/each}}
           </div>
      </div>
 </form>

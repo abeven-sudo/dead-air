@@ -79,9 +79,7 @@ export class DeadAirActorSheet extends ActorSheet {
    */
   _prepareCharacterData(context) {
     // Handle ability scores.
-    for (let [k, v] of Object.entries(context.system.abilities)) {
-      v.label = game.i18n.localize(CONFIG.DEAD_AIR.abilities[k]) ?? k;
-    }
+
   }
 
   /**
@@ -174,6 +172,9 @@ export class DeadAirActorSheet extends ActorSheet {
     // Rollable abilities.
     html.on('click', '.rollable', this._onRoll.bind(this));
 
+    // Update dots
+    html.on('click', '.clickable', this._onClick.bind(this));
+
     // Drag events for macros.
     if (this.actor.isOwner) {
       let handler = (ev) => this._onDragStart(ev);
@@ -187,41 +188,38 @@ export class DeadAirActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
 
-    console.log(dataset);
-
-    function iterateattrib(num, value, stat) {
-            for(let i = 1; i <= num; i++){
+    // Iterate over the row of dots passed in
+    function iteratedots(value, max, stat) {
+        for(let i = 0; i <= value-1; i++){
                 var Element = document.getElementById(`${stat}-${i}`);
 
-               if (i <= value) {
+               if (i <= max-1) {
                     Element.dataset.state = "x";
                 } else {
-                    Element.dataset.state = "/";                 
+                    Element.dataset.state = "/";
                 }
             }
      }
 
-    // Get all the attribute values
-        let attributereference = `this.actor.system.da_attributes`;
-        let attributescore = eval(attributereference);
+     // Firstly update the attributes
+      let attributereference = `this.actor.system.attributes`;
+      let attributearray = eval(attributereference);
 
-        let body = attributescore.body.value;
-        let determination = attributescore.determination.value;
-        let mind = attributescore.mind.value;
-        let presence = attributescore.presence.value;
-        let reaction = attributescore.reaction.value;
+      let key = 0;
+      for (key in attributearray) {
+          let currentrecord = attributearray[key];
+          iteratedots(currentrecord.value, currentrecord.max, currentrecord.label);
+      }
 
-     // Update the screen DOM
-        
-        iterateattrib(6, body, "body");
-        iterateattrib(6, determination, "determination");
-        iterateattrib(6, mind, "mind");
-        iterateattrib(6, presence, "presence");
-        iterateattrib(6, reaction, "reaction");
+     // Then update preperation
+      let preparationreference = `this.actor.system.preparation`;
+      let preparationarray = eval(preparationreference);
 
-
-
-
+      key = 0;
+      for (key in preparationarray) {
+          let currentrecord = preparationarray[key];
+          iteratedots(currentrecord.value, currentrecord.max, currentrecord.label);
+      }
 
  }
 
@@ -257,141 +255,311 @@ export class DeadAirActorSheet extends ActorSheet {
    * @param {Event} event   The originating click event
    * @private
    */
-  _onRoll(event) {
+  _onClick(event) {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;
 
-    // Handle item rolls.
-    if (dataset.testroll) {
-
-        function iterateattrib(num, value, stat) {
-            for(let i = 1; i <= num; i++){
-                var Element = document.getElementById(`${stat}-${i}`);
-
-               if (i <= value) {
-                    Element.dataset.state = "x"; 
-                } else {
-                    Element.dataset.state = "/";                 
-                }
-            }
-        }
-
-     // Get what was clicked on
-        let attribute = dataset.label;
-        let index = dataset.index;
+      // Get what was clicked on
+        let label = dataset.label;
+        let index = Number(dataset.index) + 1;
 
      // Update the attribute
         let actor = this.actor;
 
-        actor.update({ [`system.da_attributes.${attribute}.value`]: `${index}` });
+        actor.update({ [`${label}.value`]: `${index}` });
+  }
 
-    // Get all the attribute values
-        let attributereference = `this.actor.system.da_attributes`;
-        let attributescore = eval(attributereference);
+  /**
+   * Handle clickable rolls.
+   * @param {Event} event   The originating click event
+   * @private
+   */
+   async _onRoll(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const dataset = element.dataset;
 
-        let body = attributescore.body.value;
-        let determination = attributescore.determination.value;
-        let mind = attributescore.mind.value;
-        let presence = attributescore.presence.value;
-        let reaction = attributescore.reaction.value;
+// Functions we need in here
 
-     // Update the screen DOM
+
+async function diceroller(checkObj) {
+  // Finally roll the dice!
+
+  async function diceroller(numdice, target) {
+    const pattern = "<ol(.|\n)*?(?=/ol>)";
+    let roll = new Roll(`${numdice}d6cs>${target}`);
+    await roll.evaluate();
+    let successes = roll.total;
+    let rolltt = await roll.getTooltip();
+    let array_matches = rolltt.match(pattern);
+    let rolloutput = (array_matches.at(0) + "/ol>");
+    return [successes, rolloutput];
+  }
+
+  // Dice Rolling Logic
+  checkObj.successes = Number(checkObj.basesuccesses);
+
+  // If required, Roll the standard dice, 1s do not succeed
+  if ( checkObj.standarddice > 0 ) {
+    checkObj.standardroll = await diceroller(checkObj.standarddice, 1);
+
+    console.log(checkObj);
+    checkObj.successes = checkObj.successes + checkObj.standardroll[0];
+  }
+
+  // If required, Roll the advantage dice, 1s do not succeed, 1s do not fail
+  if ( Number(checkObj.advantagedice) > 0 ) {
+    checkObj.advantageroll = await diceroller(checkObj.advantagedice, 1);
+    checkObj.successes = checkObj.successes + checkObj.advantageroll[0];
+  }
+
+  // If required, Roll the disadvantage dice, 2s do not succeed
+  if ( Number(checkObj.disadvantagedice) > 0 ) {
+    checkObj.disadvantageroll = await diceroller(checkObj.disadvantagedice, 2);
+    checkObj.successes = checkObj.successes + checkObj.disadvantageroll[0];
+  }
+
+  return checkObj;
+
+}
+
+function calculatedicetoroll(html, actor, checkObj) {
+  // Read required results from HTML
+  let outcome = parseInt(html.find("[name=outcome]")[0].value);
+  let OL = $("input:radio[name=OL]:checked").val();
+  let usedsoma = parseInt(html.find("[name=soma]")[0].value);
+  let advdice = parseInt(html.find("[name=advdice]")[0].value);
+  let disdice = parseInt(html.find("[name=disdice]")[0].value);
+  let netadvdisdice = ( advdice - disdice );
+
+  // Record base OL
+  checkObj.baseOL = Number(OL);
+
+  // Increase the OL based on the success being looked for
+  checkObj.modifiedOL = Number(OL) + Number(outcome);
+
+  // Save the outcome number for later
+  checkObj.outcomenumber = Number(outcome);
+
+  if ( outcome === 0 ) {
+    checkObj.outcome = "Outcome with a cost";
+  }
+  if ( outcome === 1 ) {
+    checkObj.outcome = "Standard outcome";
+  }
+  if ( outcome === 2 ) {
+    checkObj.outcome = "Outcome with an increment";
+  }
+
+  // Increase base successes with Soma usage and reduce Soma
+  if ( usedsoma > 0 ) {
+    // Read value of rolled attribute
+    let currentsoma = Number(actor.system.trackedresources.soma.value);
+    checkObj.basesuccesses = Number(checkObj.basesuccesses) + usedsoma;
+    checkObj.usedsoma = usedsoma;
+    let newsoma = currentsoma - usedsoma;
+
+    actor.update({ [`system.trackedresources.soma.value`]: newsoma });
+  }
+
+  // Work out advantage or disadvantage dice, only do this after the first click
+  if ( netadvdisdice > 0 ) {
+    checkObj.advantagedice = netadvdisdice;
+    checkObj.disadvantagedice = 0;
+  } else {
+    if ( netadvdisdice < 0 ) {
+      checkObj.disadvantagedice = netadvdisdice * -1;
+      checkObj.advantagedice = 0;
+    }
+  }
+
+  // We can now clear the advantage and disadvantage dice
+  actor.update({ [`system.trackedresources.advantagedice`]: "0" });
+  actor.update({ [`system.trackedresources.disadvantagedice`]: "0" });
+
+  // Work out how many standard dice
+  checkObj.standarddice = Math.max(0, checkObj.modifiedOL - checkObj.basesuccesses);
+
+  if ( checkObj.advantagedice > 0 ) {
+    checkObj.standarddice = Math.max(0, checkObj.modifiedOL - checkObj.advantagedice - checkObj.basesuccesses);
+  }
+  if ( checkObj.disadvantagedice > 0 ) {
+    checkObj.standarddice = Math.max(0, checkObj.modifiedOL - checkObj.disadvantagedice - checkObj.basesuccesses);
+  }
+
+  return checkObj;
+
+}
+
+  async function calloutput(checkObj) {
+  // Render template not formatting HTML correctly, so this approach is used
+     let standarddiceoutput = "";
+     let advantagediceoutput = "";
+     let disadvantagediceoutput = "";
+
+  // At this point check roll success or failure. If any 1s on Standard or 1-2s on disadvantage dice
+     checkObj.checkresult = checkObj.outcome;
+
+  // Set up dice strings
+     if (typeof checkObj.standardroll !== "undefined") {
+         standarddiceoutput = "<h3>Standard Dice</h3>" + checkObj.standardroll[1];
+  // At this point check roll success or failure. If any 1s on Standard or 1-2s on disadvantage dice
+         if ( Number(checkObj.standardroll[0]) < Number(checkObj.standarddice) ) {
+             checkObj.outcome = "Check failed!";
+             checkObj.successes = 0;
+         }
+     }
+
+     if (typeof checkObj.advantageroll !== "undefined") {
+         advantagediceoutput = "<h3>Advantage Dice</h3>" + checkObj.advantageroll[1];
+     }
+
+     if (typeof checkObj.disadvantageroll !== "undefined") {
+         disadvantagediceoutput = "<h3>Disadvantage Dice</h3>" + checkObj.disadvantageroll[1];
+  // At this point check roll success or failure. If any 1s on Standard or 1-2s on disadvantage dice
+         if ( Number(checkObj.disadvantageroll[0]) < Number(checkObj.disadvantagedice) ) {
+             checkObj.outcome = "Check failed!";
+             checkObj.successes = 0;
+         }  
+     }
+
+  // Failed advantage dice could reduce the outcome to a failed state or lower state of success
+    let reduction = Number(checkObj.advantagedice) - Number(checkObj.advantageroll[0]);
+
+    console.log(reduction);
         
-        iterateattrib(6, body, "body");
-        iterateattrib(6, determination, "determination");
-        iterateattrib(6, mind, "mind");
-        iterateattrib(6, presence, "presence");
-        iterateattrib(6, reaction, "reaction");
+    if ( reduction > 0 ) {
+       let reductionstep = checkObj.outcomenumber - reduction;
 
+console.log(checkObj.outcomenumber);
+    console.log(reductionstep);
+
+         if ( Number(reductionstep) < 0 ) {
+           checkObj.outcome = "Check failed!";
+         }
+         if ( Number(reductionstep) === 0 ) {
+           checkObj.outcome = "Outcome with a cost";
+         }
+         if ( Number(reductionstep) === 1 ) {
+           checkObj.outcome = "Standard outcome";
+         }
     }
 
+    let content = `<div class="grid grid-2col">
+                       <div>
+                           <p>Target OL</p>
+                           <p class="bigcirclegreen flex-group-center">${checkObj.modifiedOL}</p>
+                       </div>
+                       <div>
+                           <p>Rolled Successes</p>
+                           <p class="bigcirclegreen flex-group-center">${checkObj.successes}</p>
+                       </div>
+                    </div>
+                    <div>
+                        <h3>Result</h3>
+                        <p>${checkObj.outcome}</p>
+                    </div>
+                    <div class="dice-tooltip">
+                        <section class="tooltip-part">
+                            <div class="dice">
+                                ${standarddiceoutput}
+                                ${advantagediceoutput}
+                                ${disadvantagediceoutput}
+  	                    </div>
+                         </section>
+                     </div>`;
+
+    ChatMessage.create({content: `${content}`});
+
+  }
+
+
     // Dead Air Roller
-    if (dataset.daroll) {
+    if (dataset.roll) {
 
+      // Dicerolling function part 1
       // Detect a Dead Air roll from the attribute part of the sheet 
+      // Get the attributes type and value from the actor
+      // Read value of rolled attribute
 
-      let content = `<label for="numberdice">How many regular dice to roll:</label>
-                     <input name="numberdice" type="number" value="1"></input>
-                     <label for="numadvdice">How many advantage dice to roll:</label>
-                     <input name="numadvdice" type="number" value="0"></input>
-                     <label for="numdisdice">How many disadvantage dice to roll:</label>
-                     <input name="numdisdice" type="number" value="0"></input>`;
+      // Make actor convienient
+      let actor = this.actor;
 
+      let checkObj = {
+        attributevalue: eval(`this.actor.${dataset.label}.value`),
+        attributelabel: eval(`this.actor.${dataset.label}.label`),
+        attributestring: dataset.label,
+        basesuccesses: eval(`this.actor.${dataset.label}.value`),
+        usedsoma: 0,
+        outcomenumber: 0,
+        outcome: "",
+        checkresult: "",
+        baseOL: 0,
+        modifiedOL: 0,
+        successes: 0,
+        standarddice: 0,
+        advantagedice: this.actor.system.trackedresources.advantagedice,
+        disadvantagedice: this.actor.system.trackedresources.disadvantagedice
+      };
+
+      let data = { attributeslabel: checkObj.attributelabel,
+                   attributescore: checkObj.attributevalue,
+                   advantagedice: checkObj.advantagedice,
+                   disadvantagedice: checkObj.disadvantagedice
+                 };
+
+      let content = await renderTemplate("systems/dead-air/templates/dialogue/rd.html", data);
+    
       new Dialog({
-          title: "Number of Dice to Roll",
+          title: "Position or Defence Check",
           content,
           buttons: {
               roll: {
                   label: "Roll!",
                   callback: async (html) => {
+		    // Handle responses and do all of the calculations to generate the three possible roll pools
+                    let dicecalc = calculatedicetoroll(html, this.actor, checkObj);
+                    // Retrieve values from the return array
+                    console.log("Dice Calc");
+                    console.log(dicecalc);
 
-                      let numstddice = parseInt(html.find("[name=numberdice]")[0].value);
-                      let numdisdice = parseInt(html.find("[name=numdisdice]")[0].value);
-                      let numadvdice = parseInt(html.find("[name=numadvdice]")[0].value);
+                    checkObj = dicecalc;
 
-                      // Roll the standard dice, 1s do not succeed
-	
-                        let stdroll = new Roll(`${numstddice}d6cs>=2`);
-                        await stdroll.evaluate();
+                    data =        { basesuccesses: checkObj.basesuccesses,
+                                    standarddice: checkObj.standarddice,
+                                    advdice: checkObj.advantagedice,
+                                    disdice: checkObj.disadvantagedice
+                                  };
 
+                    let content = await renderTemplate("systems/dead-air/templates/dialogue/ro.html", data);
 
-                      // Roll the advantage dice, 1s do not succeed, 1s do not fail
+                    new Dialog({
+                      title: "Box 2",
+                       content,
+                         buttons: {
+                           roll: {
+                             label: "Roll!",
+                               callback: async (html) => {
+                                 // Roll the dice and get the responses
+                                 let rolloutputs = await diceroller(checkObj);
+                                 checkObj = rolloutputs;
 
-   		        let advroll = new Roll(`${numadvdice}d6cs>=2`);
-                        await advroll.evaluate();
-	
+                                 console.log(checkObj);
 
-                      // Roll the disadvantage dice, 2s do not succeed
+                                // Call the output
+                                let output = calloutput(checkObj);
+                              }
+                            }
+                          }
+                     },
+                    { width: 450 }).render(true);
 
-                        let disroll = new Roll(`${numdisdice}d6cs>=3`);
-                        await disroll.evaluate();
-
-
-                      // Get the attributes value from the actor
-                      let attributereference = `this.actor.system.da_attributes.${dataset.llabel}.value`;
-                      let attributescore = eval(attributereference);
- 
-                      // OL beaten is attribute value + number of successes
-                      let OL = attributescore + stdroll.total + advroll.total + disroll.total;
-
-                      // Don't count advantage dice here as they are allowed to fail
-                      let success = "no";
-                      if ( numstddice + numdisdice === stdroll.total + disroll.total ) {
-                           success = "yes";
-                      } else {
-                           OL = 0;
-                      }
-
-                      // Build the output
-
-                      let rolltt1 = await stdroll.getTooltip();
-                      let rolltt2 = await advroll.getTooltip();
-                      let rolltt3 = await disroll.getTooltip();
-
-                      const template_file = "systems/dead-air/templates/dialogue/roll_output.html";
-                      const rendered_html = await renderTemplate(template_file, {});
-
-                      if (success === "yes") {
-                          content = html;
-	                  content = `<input class="bigcirclegreen" type="text" value="${OL}" data-dtype="Number">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
-                                             } else {
-                          content = html;
-	                  content = `<input class="bigcirclered">` + OL + "</p>" + "Standard Dice:<br>" + rolltt1 + "Advantage Dice:<br>" + rolltt2 + "Disadvantage Dice:<br>" + rolltt3;
-	                                     }
-
-                      ChatMessage.create({content: `${rendered_html}`});
+                  }
               }
-        }
+          }
+      },
+      { width: 450 }).render(true);
     }
-},
-{
-   width: 250
-}).render(true)
-
-
-
-    }
-
   }
 }
